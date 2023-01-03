@@ -1,0 +1,192 @@
+[33mcommit 73c64497048dace5113e119015fbecb5e4de8ca2[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: mobez <aanik@bk.ru>
+Date:   Tue Jan 3 23:33:48 2023 +1000
+
+    add plagin aplay
+
+[33mcommit 488d9ac1bac4dea62825332fcf56d81b79a524e0[m
+Author: mobez <aanik@bk.ru>
+Date:   Tue Jan 3 23:29:44 2023 +1000
+
+    add plagin aplay
+
+[33mcommit 44ff2bec298dfd03a0a689dc31c88d6b99676ff1[m
+Author: mobez <aanik@bk.ru>
+Date:   Tue Jan 3 23:25:18 2023 +1000
+
+    add plagin aplay
+
+[33mcommit 42014094255485c6a572a10ce18bd344ea0988c2[m
+Author: mobez <aanik@bk.ru>
+Date:   Tue Jan 3 23:20:23 2023 +1000
+
+    add plagin aplay
+
+[33mcommit 4296743cc1848d43c2e4749d4db7dabc68273882[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Wed Aug 17 16:13:36 2022 +0300
+
+    WEBAPI:
+    - runva_webapi.py - позволяет запустить webapi без распознавания VOSK - сделана необходимая обработка ошибок
+
+[33mcommit 95b631ecc70b53560ccebe81d8abaa9fe42d8f9c[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Wed Jul 6 16:21:50 2022 +0300
+
+    6.8
+    WEBAPI:
+    - runva_webapi.py - таймер обновления вызывается внутри, а не внешним HTTP(S) вызовом. Удобнее и правильнее.
+    Но: требуется установка pip install fastapi-utils
+
+[33mcommit aafd5e552fbeb49303b2a062886b529dcc95798f[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Sun Jun 19 15:59:09 2022 +0300
+
+    6.7
+    - Jaa.py обновлен до 1.7.1
+    - плагин webapi.py для хранения настроек удален
+    - runva_webapi.py настройки теперь хранятся в runva_webapi.json и загружаются с помощью нового jaa.py
+    - старые настройки webapi будут автоматически скопированы (я надеюсь)
+
+[33mcommit 8f21cfa149437bf410bc0e5c6b93311e43e111e8[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Thu Jun 16 23:55:33 2022 +0300
+
+    small fix for win32 notice
+
+[33mcommit 960604ada3bffec736c7cf069da8707c77cebb32[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Thu Jun 16 23:51:45 2022 +0300
+
+    v6.5
+    vacore.py - добавлено автопереключение в TTS console при ошибках инициализации (для упрощения первого запуска)
+    plugin_tts_console.py - подсветка вывода голубым
+
+[33mcommit 1ffbf8da0eca7d5a287254fc0c9f90847b5ccde5[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Thu Jun 16 23:44:58 2022 +0300
+
+    v6.4
+    plugin_playwav_simpleaudio.py - добавлен еще один плеер WAV
+    core - добавлено много отладочной инфы при ошибках инициализации (для запускающих первый раз)
+    PLUGINS.md - инфа о WAV-плагинах
+
+[33mcommit eb23d36b4977bbfd0c8a098772f6da87a5f6ba2b[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Sun Jun 12 18:07:23 2022 +0300
+
+    plugin_datetime.py - можно указывать сепаратор при озвучке часов/минут. По умолчанию ", " (старый вариант - " и ")
+
+[33mcommit 474f4d11e1948876a167202bb1a802fffe4c96df[m
+Merge: 60f5746 15dbbef
+Author: Vladislav Janvarev <janvarev@gmail.com>
+Date:   Sun Jun 12 17:59:27 2022 +0300
+
+    Merge pull request #31 from lelostsamurai/refactor/improve-plugin_datetime
+    
+    Улучшения plugin_datetime.py (для времени)
+
+[33mcommit 15dbbef73340dcc05369617066786abaae84b82e[m
+Author: lelostsamurai <lelostsamurai@gmail.com>
+Date:   Sun Jun 12 17:18:23 2022 +0300
+
+    plugin_datetime.py - улучшения для времени:
+    
+    - озвучивать единицы времени
+    - не произносить минуты, когда 0
+    - говорить "полдень" и "полночь" вместо часов и минут
+
+[33mcommit 60f5746c8f6c71e816da8b18cffdc42256497735[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Fri Jun 10 14:46:40 2022 +0300
+
+    plugin_mediacmds.py - команда стоп
+    plugin_mpchcmult.py - уменьшены фразы переспроса
+
+[33mcommit 798bccb057dd98f04b6c9747f5679606764dc9db[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Thu Jun 9 23:11:01 2022 +0300
+
+    фикс - вернута обработка названия папок
+
+[33mcommit 3b2fb42b4a371ff5c2bc865a7db3fae430fc538d[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Thu Jun 9 23:09:43 2022 +0300
+
+    plugin_mpchcmult.py - уточнена кодировка файла _irenename.txt - UTF-8
+
+[33mcommit 27a33f9cc407e151a1c0ce157883303190308ce0[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Thu Jun 9 22:55:57 2022 +0300
+
+    small fix in plugin_mpchcmult.py
+
+[33mcommit 30762b71227213474ed357460c46545e9d71a148[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Thu Jun 9 22:43:57 2022 +0300
+
+    plugin_mpchcmult.py - 2.0, поддержка сериалов
+    PLUGINS.md - инфа о поддержке сериалов.
+
+[33mcommit 24a5d528282f887d4bb3da44b1a6ab948250056c[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Tue Jun 7 12:37:15 2022 +0300
+
+    апдейт plugin_tts_silero_v3.py
+    - поддерживается новая выложенная модель (https://habr.com/ru/post/669910/ )
+    - можно выбрать другие языки, для которых тоже появились модели
+
+[33mcommit baad66e0d08454fe540117febf2ae942b6dd593c[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Thu May 26 13:53:31 2022 +0300
+
+    6.3 - фикс в webapi - апдейт таймеров теперь вызывается нерекурсивно
+
+[33mcommit d0709ce89504694307e38485adbffc44a3a86c8e[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Thu May 26 11:52:18 2022 +0300
+
+    6.2 - webApi поддерживает ws для распознавания текста с микрофона
+    экспериментальный клиент в mic_client для только слушания микрофона с распознаванием на сервере.
+
+[33mcommit 1fc02a65cc505cc1a6604a3997b3de8860b7ac8c[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Wed May 25 17:03:23 2022 +0300
+
+    вызов таймеров адаптивно - https, если требуется ssl
+
+[33mcommit 0bd952f1016fc45f48c0a60326acbba47883e382[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Wed May 25 16:09:56 2022 +0300
+
+    6.1
+    Добавлена возможность запуска с SSL сертификатами - допопция в webapi.json.
+    Добавлены самоподписанные сертификаты для localhost, чтобы не генерить их вручную.
+
+[33mcommit a2cfc421a73da0980848f645371fd6ce05615e0d[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Wed May 25 15:23:15 2022 +0300
+
+    6.0
+    Для WebApi добавлен HTML-клиент на основе Vosk Browser. Он распознает звук на клиенте, и вызывает API Ирины.
+    - в папке webapi_client
+    - доки в INSTALL_MULTI.md
+
+[33mcommit 048d1d7132b9daae159beedf7e0b3498cd7af92c[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Mon May 16 23:13:33 2022 +0300
+
+    более пошаговая инфа про установку под WIN
+    timer - альт фраза "поставь таймер"
+
+[33mcommit 8e68248c02ebd3ccdde3659dc6f447baeddf0893[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Thu May 12 20:22:02 2022 +0300
+
+    WebApi - избавлено от двойного запуска ядра.
+
+[33mcommit 19571a0e8263fbb610a6f9e1d02a0a02dcacda7a[m
+Author: janvarev <janvarev@gmail.com>
+Date:   Thu May 12 19:59:14 2022 +0300
+
+    добавлена функция replyWasGiven в web-api. Запускает контекстный таймер при настройке contextRemoteWaitForCall = true. Нужно, если вы пол
