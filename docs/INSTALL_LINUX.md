@@ -42,6 +42,29 @@ pip3 install scons lxml
 pip3 install rhvoice-wrapper
 pip3 install rhvoice-wrapper-bin
 ```
+```
+RHVoices available voices: ('alan', 'aleksandr', 'anatol', 'anna', 'arina', 'artemiy', 'azamat', 'bdl', 'clb', 'elena', 'irina', 'kiko', 'letícia-f123', 'natalia', 'natia', 'nazgul', 'pavel', 'slt', 'spomenka', 'talgat')
+   alan :  {'no': 0, 'name': 'Alan', 'lang': 'en', 'gender': 'male', 'country': 'US'}
+   aleksandr :  {'no': 1, 'name': 'Aleksandr', 'lang': 'ru', 'gender': 'male', 'country': 'RU'}
+   anatol :  {'no': 2, 'name': 'Anatol', 'lang': 'uk', 'gender': 'male', 'country': 'UK'}
+   anna :  {'no': 3, 'name': 'Anna', 'lang': 'ru', 'gender': 'female', 'country': 'RU'}
+   arina :  {'no': 4, 'name': 'Arina', 'lang': 'ru', 'gender': 'female', 'country': 'RU'}
+   artemiy :  {'no': 5, 'name': 'Artemiy', 'lang': 'ru', 'gender': 'male', 'country': 'RU'}
+   azamat :  {'no': 6, 'name': 'Azamat', 'lang': 'ky', 'gender': 'male', 'country': 'KG'}
+   bdl :  {'no': 7, 'name': 'Bdl', 'lang': 'en', 'gender': 'male', 'country': 'US'}
+   clb :  {'no': 8, 'name': 'Clb', 'lang': 'en', 'gender': 'female', 'country': 'US'}
+   elena :  {'no': 9, 'name': 'Elena', 'lang': 'ru', 'gender': 'female', 'country': 'RU'}
+   irina :  {'no': 10, 'name': 'Irina', 'lang': 'ru', 'gender': 'female', 'country': 'RU'}
+   kiko :  {'no': 11, 'name': 'Kiko', 'lang': 'mk', 'gender': 'male', 'country': 'MK'}
+   letícia-f123 :  {'no': 12, 'name': 'Letícia-F123', 'lang': 'pt', 'gender': 'female', 'country': 'BR'}
+   natalia :  {'no': 13, 'name': 'Natalia', 'lang': 'uk', 'gender': 'female', 'country': 'UK'}
+   natia :  {'no': 14, 'name': 'Natia', 'lang': 'ka', 'gender': 'female', 'country': 'GE'}
+   nazgul :  {'no': 15, 'name': 'Nazgul', 'lang': 'ky', 'gender': 'female', 'country': 'KG'}
+   pavel :  {'no': 16, 'name': 'Pavel', 'lang': 'ru', 'gender': 'male', 'country': 'RU'}
+   slt :  {'no': 17, 'name': 'Slt', 'lang': 'en', 'gender': 'female', 'country': 'US'}
+   spomenka :  {'no': 18, 'name': 'Spomenka', 'lang': 'eo', 'gender': 'female', 'country': 'NaN'}
+   talgat :  {'no': 19, 'name': 'Talgat', 'lang': 'tt', 'gender': 'male', 'country': 'RU'}
+```
  
 Проблемы обсуждались в этой ветке комментариев: https://habr.com/ru/post/595855/#comment_24043171
 

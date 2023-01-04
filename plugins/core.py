@@ -21,11 +21,18 @@ def start(core:VACore):
             "ttsEngineId2": "", # двиг для прямой озвучки на сервере. Если пуст - используется ttsEngineId
             "playWavEngineId": "audioplayer",
             "linguaFrancaLang": "ru", # язык для библиотеки lingua-franca конвертирования чисел
-            "voiceAssNames": "ирина|ирины|ирину",
+            "voiceAssNamesW": "ирина|ирины|ирину",
+            "voiceAssNamesM": "дарвин|дарвина|дарвины|дарвину",
             "logPolicy": "cmd", # all | cmd | none
 
-            "replyNoCommandFound": "Извини, я не поняла",
-            "replyNoCommandFoundInContext": "Не поняла...",
+            "voiceId": "anna",
+            "voiceIdW": "anna",
+            "voiceIdM": "aleksandr",
+            "replyNoCommandFoundW": "Извини, я не поняла",
+            "replyNoCommandFoundInContextW": "Не поняла...",
+            "replyNoCommandFoundM": "Извини, я не понял",
+            "replyNoCommandFoundInContextM": "Не понял...",
+            "floorM": False,
             "replyOnlineRequired": "Для этой команды необходим онлайн",
 
             "contextDefaultDuration": 10,
@@ -47,7 +54,10 @@ def start_with_options(core:VACore, manifest:dict):
     core.mpcIsUseHttpRemote = options["mpcIsUseHttpRemote"]
     core.isOnline = options["isOnline"]
 
-    core.voiceAssNames = options["voiceAssNames"].split("|")
+    core.voiceAssNamesW = options["voiceAssNamesW"].split("|")
+    core.voiceAssNamesM = options["voiceAssNamesM"].split("|")
+    core.voiceId = options["voiceId"]
+    core.floorM = options["floorM"]
     core.ttsEngineId = options["ttsEngineId"]
     core.ttsEngineId2 = options["ttsEngineId2"]
     core.playWavEngineId = options["playWavEngineId"]

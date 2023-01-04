@@ -4,6 +4,7 @@ import hashlib
 
 from termcolor import colored, cprint
 import time
+
 from threading import Timer
 
 from jaa import JaaCore
@@ -41,7 +42,10 @@ class VACore(JaaCore):
         self.isOnline = False
         self.version = version
 
-        self.voiceAssNames = []
+        self.voiceAssNamesW = []
+        self.voiceAssNamesM = []
+        self.voiceId = ""
+        self.floorM = False
 
         self.useTTSCache = False
         self.tts_cache_dir = "tts_cache"
@@ -289,10 +293,16 @@ class VACore(JaaCore):
             # if not founded
             if self.context == None:
                 # no context
-                self.say(self.plugin_options("core")["replyNoCommandFound"])
+                if self.floorM:
+                    self.say(self.plugin_options("core")["replyNoCommandFoundM"])
+                else:
+                    self.say(self.plugin_options("core")["replyNoCommandFoundW"])
             else:
                 # in context
-                self.say(self.plugin_options("core")["replyNoCommandFoundInContext"])
+                if self.floorM:
+                    self.say(self.plugin_options("core")["replyNoCommandFoundInContextM"])
+                else:
+                    self.say(self.plugin_options("core")["replyNoCommandFoundInContextW"])
                 # restart timer for context
                 if self.contextTimer != None:
                     self.context_set(self.context,self.contextTimerLastDuration)
@@ -373,7 +383,28 @@ class VACore(JaaCore):
                 for ind in range(len(voice_input)):
                     callname = voice_input[ind]
 
-                    if callname in self.voiceAssNames: # найдено имя ассистента
+                    if callname in self.voiceAssNamesW: # найдено имя ассистента
+                        self.floorM = False
+                        self.voiceId = self.plugin_options("core")["voiceIdW"]
+                        if self.logPolicy == "cmd":
+                            print("Input (cmd): ",voice_input_str)
+
+
+                        command_options = " ".join([str(input_part) for input_part in voice_input[(ind+1):len(voice_input)]])
+
+                        # running some cmd before run cmd
+                        if func_before_run_cmd != None:
+                            func_before_run_cmd()
+
+
+                        #context = self.context
+                        #self.context_clear()
+                        self.execute_next(command_options, None)
+                        haveRun = True
+                        break
+                    if callname in self.voiceAssNamesM: # найдено имя ассистента
+                        self.floorM = True
+                        self.voiceId = self.plugin_options("core")["voiceIdM"]
                         if self.logPolicy == "cmd":
                             print("Input (cmd): ",voice_input_str)
 
@@ -445,7 +476,7 @@ class VACore(JaaCore):
         print("run ONLINE" if self.isOnline else "run OFFLINE")
 
         self.format_print_key_list("TTS engines", self.ttss.keys())
-        self.format_print_key_list("Assistant names", self.voiceAssNames)
+        self.format_print_key_list("Assistant names", self.voiceAssNamesW)
 
         cprint("Commands list: "+"#"*65, "blue")
         for plugin in self.plugin_commands:
