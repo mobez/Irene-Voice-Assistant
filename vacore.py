@@ -55,6 +55,7 @@ class VACore(JaaCore):
 
         self.logPolicy = ""
         self.tmpdir = "temp"
+        self.wavedir = "waves/"
         self.tmpcnt = 0
 
         self.lastSay = ""
@@ -63,10 +64,14 @@ class VACore(JaaCore):
 
         self.context = None
         self.contextTimer = None
+        self.recTimer = None
         self.contextTimerLastDuration = 0
 
         self.contextDefaultDuration = 10
         self.contextRemoteWaitForCall = False
+
+        self.recOld = False
+        self.noncmd = False
 
         import mpcapi.core
         self.mpchc = mpcapi.core.MpcAPI()
@@ -266,7 +271,7 @@ class VACore(JaaCore):
             #context(self,command)
             self.context_clear()
             self.call_ext_func_phrase(command,context)
-            return
+            return True
 
         try:
             # первый проход - ищем полное совпадение
@@ -277,7 +282,7 @@ class VACore(JaaCore):
                         rest_phrase = ""
                         next_context = context[keyall]
                         self.execute_next(rest_phrase,next_context)
-                        return
+                        return True
 
             # второй проход - ищем частичное совпадение
             for keyall in context.keys():
@@ -287,16 +292,22 @@ class VACore(JaaCore):
                         rest_phrase = command[(len(key)+1):]
                         next_context = context[keyall]
                         self.execute_next(rest_phrase,next_context)
-                        return
+                        return True
 
 
             # if not founded
             if self.context == None:
                 # no context
-                if self.floorM:
-                    self.say(self.plugin_options("core")["replyNoCommandFoundM"])
+                if self.noncmd or not self.recOld:
+                    if self.floorM:
+                        self.say(self.plugin_options("core")["replyNoCommandFoundInContextM"])
+                    else:
+                        self.say(self.plugin_options("core")["replyNoCommandFoundInContextW"])
                 else:
-                    self.say(self.plugin_options("core")["replyNoCommandFoundW"])
+                    if self.floorM:
+                        self.say(self.plugin_options("core")["replyNoCommandFoundM"])
+                    else:
+                        self.say(self.plugin_options("core")["replyNoCommandFoundW"])
             else:
                 # in context
                 if self.floorM:
@@ -308,6 +319,7 @@ class VACore(JaaCore):
                     self.context_set(self.context,self.contextTimerLastDuration)
         except Exception as err:
             print(traceback.format_exc())
+        return False
 
     # ----------- timers -----------
     def set_timer(self, duration, timerFuncEnd, timerFuncUpd = None):
@@ -379,37 +391,34 @@ class VACore(JaaCore):
             voice_input = voice_input_str.split(" ")
             #callname = voice_input[0]
             haveRun = False
+            nameOk = False
             if self.context == None:
                 for ind in range(len(voice_input)):
                     callname = voice_input[ind]
 
                     if callname in self.voiceAssNamesW: # найдено имя ассистента
+                        self.noncmd = False
+                        self.timeoutCancel()
+                        nameOk = True
                         self.floorM = False
                         self.voiceId = self.plugin_options("core")["voiceIdW"]
-                        if self.logPolicy == "cmd":
-                            print("Input (cmd): ",voice_input_str)
-
-
-                        command_options = " ".join([str(input_part) for input_part in voice_input[(ind+1):len(voice_input)]])
-
-                        # running some cmd before run cmd
-                        if func_before_run_cmd != None:
-                            func_before_run_cmd()
-
-
-                        #context = self.context
-                        #self.context_clear()
-                        self.execute_next(command_options, None)
-                        haveRun = True
-                        break
                     if callname in self.voiceAssNamesM: # найдено имя ассистента
+                        self.noncmd = False
+                        self.timeoutCancel()
+                        nameOk = True
                         self.floorM = True
                         self.voiceId = self.plugin_options("core")["voiceIdM"]
+                    if self.recOld or nameOk:
                         if self.logPolicy == "cmd":
                             print("Input (cmd): ",voice_input_str)
-
-
-                        command_options = " ".join([str(input_part) for input_part in voice_input[(ind+1):len(voice_input)]])
+                        if self.recOld:
+                            command_options = " ".join([str(input_part) for input_part in voice_input[(ind):len(voice_input)]])
+                        else:
+                            if (ind+1 >= len(voice_input)):
+                                self.recOld = True
+                                self.timeoutSet(15)
+                                print("Null mess!")
+                            command_options = " ".join([str(input_part) for input_part in voice_input[(ind+1):len(voice_input)]])
 
                         # running some cmd before run cmd
                         if func_before_run_cmd != None:
@@ -418,26 +427,55 @@ class VACore(JaaCore):
 
                         #context = self.context
                         #self.context_clear()
+                        self.timeoutSet(15)
                         self.execute_next(command_options, None)
+                        self.noncmd = True
                         haveRun = True
                         break
             else:
                 if self.logPolicy == "cmd":
                     print("Input (cmd in context): ",voice_input_str)
+                else:
+                    print("Input: ",voice_input_str)
 
                 # running some cmd before run cmd
                 if func_before_run_cmd != None:
                     func_before_run_cmd()
 
                 self.execute_next(voice_input_str, self.context)
-                haveRun = True
 
+                haveRun = True
         except Exception as err:
             print(traceback.format_exc())
+        #if not haveRun:
+            #print("Input: ",voice_input_str)
 
         return haveRun
 
     # ------------ context handling functions ----------------
+
+    def timeoutCancel(self):
+        self.recOld = False
+        if self.recTimer != None:
+            self.recTimer.cancel()
+            self.recTimer = None
+
+    def timeoutSet(self, duration = None):
+        if duration == None:
+            duration = self.contextDefaultDuration
+        self.timeoutCancel()
+        self.recOld = True
+        self.recTimer = Timer(duration,self._recEnd)
+        self.recTimer.start()
+
+    def _recEnd(self):
+        self.timeoutCancel()
+        self.recOld = False
+        self.noncmd = False
+        print("Rec timeout")
+        tts_file = self.wavedir+"tethys.wav"
+        self.play_wav(tts_file)
+
 
     def context_set(self,context,duration = None):
         if duration == None:
@@ -456,18 +494,25 @@ class VACore(JaaCore):
             self.contextTimer.start()
 
 
-
     #def _timer_context
     def _context_clear_timer(self):
         print("Context cleared after timeout")
         self.contextTimer = None
         self.context_clear()
+        if self.recTimer != None:
+            self.recTimer.cancel()
+            self.recTimer = None
+            self.timeoutSet()
 
     def context_clear(self):
         self.context = None
         if self.contextTimer != None:
             self.contextTimer.cancel()
             self.contextTimer = None
+        if self.recTimer != None:
+            self.recTimer.cancel()
+            self.recTimer = None
+            self.timeoutSet()
 
     # ----------- display info functions ------
 
