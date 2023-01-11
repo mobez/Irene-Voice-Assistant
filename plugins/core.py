@@ -22,7 +22,7 @@ def start(core:VACore):
             "playWavEngineId": "audioplayer",
             "linguaFrancaLang": "ru", # язык для библиотеки lingua-franca конвертирования чисел
             "voiceAssNamesW": "ирина|ирины|ирину",
-            "voiceAssNamesM": "дарвин|дарвина|дарвины|дарвину",
+            "voiceAssNamesM": "джарвис|джарвисы|джарвиса",
             "logPolicy": "cmd", # all | cmd | none
 
             "voiceId": "anna",

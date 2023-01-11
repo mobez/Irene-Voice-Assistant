@@ -416,7 +416,7 @@ class VACore(JaaCore):
                         else:
                             if (ind+1 >= len(voice_input)):
                                 self.recOld = True
-                                self.timeoutSet(15)
+                                self.timeoutSet(30)
                                 print("Null mess!")
                             command_options = " ".join([str(input_part) for input_part in voice_input[(ind+1):len(voice_input)]])
 
@@ -426,10 +426,11 @@ class VACore(JaaCore):
 
 
                         #context = self.context
-                        #self.context_clear()
-                        self.timeoutSet(15)
+                        self.context_clear()
                         self.execute_next(command_options, None)
-                        self.noncmd = True
+                        if self.recOld:
+                            self.timeoutSet(30)
+                            self.noncmd = True
                         haveRun = True
                         break
             else:
@@ -455,7 +456,6 @@ class VACore(JaaCore):
     # ------------ context handling functions ----------------
 
     def timeoutCancel(self):
-        self.recOld = False
         if self.recTimer != None:
             self.recTimer.cancel()
             self.recTimer = None
