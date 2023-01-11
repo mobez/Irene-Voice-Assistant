@@ -442,8 +442,12 @@ class VACore(JaaCore):
                 # running some cmd before run cmd
                 if func_before_run_cmd != None:
                     func_before_run_cmd()
-
+                self.recOld = True
+                self.context_clear()
                 self.execute_next(voice_input_str, self.context)
+                if self.recOld:
+                    self.timeoutSet(30)
+                    self.noncmd = True
 
                 haveRun = True
         except Exception as err:
