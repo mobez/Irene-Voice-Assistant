@@ -397,14 +397,18 @@ class VACore(JaaCore):
                     callname = voice_input[ind]
 
                     if callname in self.voiceAssNamesW: # найдено имя ассистента
+                        self.recOld = True
                         self.noncmd = False
-                        self.timeoutCancel()
+                        if self.recTimer != None:
+                            self._recEnd()
                         nameOk = True
                         self.floorM = False
                         self.voiceId = self.plugin_options("core")["voiceIdW"]
                     if callname in self.voiceAssNamesM: # найдено имя ассистента
+                        self.recOld = True
                         self.noncmd = False
-                        self.timeoutCancel()
+                        if self.recTimer != None:
+                            self._recEnd()
                         nameOk = True
                         self.floorM = True
                         self.voiceId = self.plugin_options("core")["voiceIdM"]
@@ -415,7 +419,6 @@ class VACore(JaaCore):
                             command_options = " ".join([str(input_part) for input_part in voice_input[(ind):len(voice_input)]])
                         else:
                             if (ind+1 >= len(voice_input)):
-                                self.recOld = True
                                 self.timeoutSet(30)
                                 print("Null mess!")
                             command_options = " ".join([str(input_part) for input_part in voice_input[(ind+1):len(voice_input)]])
@@ -426,7 +429,7 @@ class VACore(JaaCore):
 
 
                         #context = self.context
-                        self.context_clear()
+                        self.timeoutCancel()
                         self.execute_next(command_options, None)
                         if self.recOld:
                             self.timeoutSet(30)
@@ -434,6 +437,8 @@ class VACore(JaaCore):
                         haveRun = True
                         break
             else:
+                self.recOld = True
+                self.timeoutCancel()
                 if self.logPolicy == "cmd":
                     print("Input (cmd in context): ",voice_input_str)
                 else:
@@ -442,8 +447,6 @@ class VACore(JaaCore):
                 # running some cmd before run cmd
                 if func_before_run_cmd != None:
                     func_before_run_cmd()
-                self.recOld = True
-                self.context_clear()
                 self.execute_next(voice_input_str, self.context)
                 if self.recOld:
                     self.timeoutSet(30)
@@ -503,20 +506,12 @@ class VACore(JaaCore):
         print("Context cleared after timeout")
         self.contextTimer = None
         self.context_clear()
-        if self.recTimer != None:
-            self.recTimer.cancel()
-            self.recTimer = None
-            self.timeoutSet()
 
     def context_clear(self):
         self.context = None
         if self.contextTimer != None:
             self.contextTimer.cancel()
             self.contextTimer = None
-        if self.recTimer != None:
-            self.recTimer.cancel()
-            self.recTimer = None
-            self.timeoutSet()
 
     # ----------- display info functions ------
 
