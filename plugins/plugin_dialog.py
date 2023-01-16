@@ -77,7 +77,7 @@ def dialog_mat(core:VACore, phrase:str):
     return
 
 def dialog_upd(core:VACore, phrase:str):
-    core.play_voice_assistant_speech("Обновляюсь, подожите минутку!")
+    core.play_voice_assistant_speech("Обновляюсь, подождите минутку!")
     os.system("systemctl restart rc-local.service")
     return
 

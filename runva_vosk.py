@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse
 import os
 import queue
@@ -32,7 +34,8 @@ if __name__ == "__main__":
     def callback(indata, frames, time, status):
         """This is called (from a separate thread) for each audio block."""
         if status:
-            print(status, file=sys.stderr)
+            # print("status:",status, file=sys.stderr)
+            pass
         if not mic_blocked:
             q.put(bytes(indata))
 
@@ -60,6 +63,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '-r', '--samplerate', type=int, help='sampling rate')
     args = parser.parse_args(remaining)
+    print(args)
     #args = {}
 
     try:
@@ -71,8 +75,10 @@ if __name__ == "__main__":
             parser.exit(0)
         if args.samplerate is None:
             device_info = sd.query_devices(args.device, 'input')
+            print(device_info)
             # soundfile expects an int, sounddevice provides a float:
-            args.samplerate = int(device_info['default_samplerate'])
+            #args.samplerate = int(device_info['default_samplerate'])
+            args.samplerate = 16000
 
         model = vosk.Model(args.model)
 
@@ -82,9 +88,13 @@ if __name__ == "__main__":
             dump_fn = None
 
 
-
-        with sd.RawInputStream(samplerate=args.samplerate, blocksize = 8000, device=args.device, dtype='int16',
-                               channels=1, callback=callback):
+        sd.default.samplerate = args.samplerate
+        #with sd.RawInputStream(samplerate=args.samplerate, blocksize = 16000, device=args.device, dtype='int16',         channels=1, callback=callback):
+        # with sd.RawInputStream(samplerate=args.samplerate, blocksize = 16000, device=args.device, dtype='int16', channels=1, callback=callback):
+        tream = sd.RawInputStream(samplerate=args.samplerate, blocksize = 16000, device=args.device, dtype='int16', channels=1, callback=callback)
+        tream.start()
+        with tream:
+            #print("samplerate: " + str(args.samplerate))
             print('#' * 80)
             print('Press Ctrl+C to stop the recording')
             print('#' * 80)
@@ -109,15 +119,16 @@ if __name__ == "__main__":
 
                     #print(recognized_data)
                     recognized_data = json.loads(recognized_data)
+                    # print(recognized_data)
                     #print(recognized_data)
                     voice_input_str = recognized_data["text"]
-
-
+                    # tream.stop()
                     if voice_input_str != "":
-                        core.run_input_str(voice_input_str,block_mic)
+                        # core.run_input_str(voice_input_str,block_mic)
+                        core.run_input_str(voice_input_str,tream.stop)
+                        # mic_blocked = False
+                        tream.start()
 
-
-                        mic_blocked = False
                         #print("UNBlocking microphone...")
                 else:
                     #print("2",rec.PartialResult())
@@ -127,6 +138,7 @@ if __name__ == "__main__":
 
                 if dump_fn is not None:
                     dump_fn.write(data)
+                # mic_blocked = False
 
     except KeyboardInterrupt:
         print('\nDone')

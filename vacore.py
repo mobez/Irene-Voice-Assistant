@@ -392,12 +392,14 @@ class VACore(JaaCore):
             #callname = voice_input[0]
             haveRun = False
             nameOk = False
+            # if func_before_run_cmd != None:
+            #     func_before_run_cmd()
             if self.context == None:
                 for ind in range(len(voice_input)):
                     callname = voice_input[ind]
 
                     if callname in self.voiceAssNamesW: # найдено имя ассистента
-                        self.recOld = True
+                        self.recOld = False
                         self.noncmd = False
                         if self.recTimer != None:
                             self._recEnd()
@@ -405,7 +407,7 @@ class VACore(JaaCore):
                         self.floorM = False
                         self.voiceId = self.plugin_options("core")["voiceIdW"]
                     if callname in self.voiceAssNamesM: # найдено имя ассистента
-                        self.recOld = True
+                        self.recOld = False
                         self.noncmd = False
                         if self.recTimer != None:
                             self._recEnd()
@@ -423,13 +425,14 @@ class VACore(JaaCore):
                                 print("Null mess!")
                             command_options = " ".join([str(input_part) for input_part in voice_input[(ind+1):len(voice_input)]])
 
-                        # running some cmd before run cmd
+                        # # running some cmd before run cmd
                         if func_before_run_cmd != None:
                             func_before_run_cmd()
 
 
                         #context = self.context
                         self.timeoutCancel()
+                        self.recOld = True
                         self.execute_next(command_options, None)
                         if self.recOld:
                             self.timeoutSet(30)
